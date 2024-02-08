@@ -1,34 +1,25 @@
-const request = require('request');
-const fs = require('fs');
+// Write a script that gets the contents of a webpage and stores it in a file.
+// The first argument is the URL to request
+// The second argument the file path to store the body response
+// The file must be UTF-8 encoded
+// You must use the module request
 
-// Define the URL for the API
-const apiUrl = process.argv[2];
+const fs = require("fs")
+const request = require("request")
 
-// Make a GET request to the API URL
-request(apiUrl, (error, response, body) => {
-    if (error || response.statusCode !== 200) {
-        console.log('Error fetching data from API');
-    } else {
-        // Parse the JSON response
-        const todos = JSON.parse(body);
+const url = process.argv[2]
+const file_path = process.argv[3]
 
-        // Initialize objects to store completed tasks for each user
-        const completedTasksByUser = {};
-
-        // Iterate over each todo item
-        todos.forEach(todo => {
-            // Check if the task is completed
-            if (todo.completed) {
-                // Increment the count of completed tasks for the user
-                if (completedTasksByUser[todo.userId]) {
-                    completedTasksByUser[todo.userId]++;
-                } else {
-                    completedTasksByUser[todo.userId] = 1;
-                }
-            }
-        });
-
-        // Print the number of completed tasks for each user
-        console.log(completedTasksByUser);
+request(url, function (error, response, body) {
+    if (error) {
+        console.error(error)
+        return
     }
-});
+
+    fs.writeFile(file_path, body, "utf8", function (error) {
+        if (error) {
+            console.error(error)
+            return
+        }
+    })
+})

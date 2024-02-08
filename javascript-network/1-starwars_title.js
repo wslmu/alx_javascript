@@ -1,31 +1,14 @@
-const request = require('request');
+// Write a script that prints the title of a Star Wars movie where the episode number matches a given integer.
+// The first argument is the movie ID
+// You must use the Star wars API with the endpoint https://swapi-api.alx-tools.com/api/films/:id
+// You must use the module request
 
-// Get the API URL from the command line argument
-const apiUrl = process.argv[2];
+const request = require("request")
+const movieId = process.argv[2]
 
-// Character ID for Wedge Antilles
-const characterId = 18;
+const endpoint = `https://swapi-api.alx-tools.com/api/films/${movieId}/`
 
-// Make a GET request to the API URL
-request(apiUrl, (error, response, body) => {
-    if (error || response.statusCode !== 200) {
-        console.log('Error fetching data from API');
-    } else {
-        // Parse the JSON response
-        const films = JSON.parse(body);
-
-        // Initialize a counter for movies where Wedge Antilles is present
-        let count = 0;
-
-        // Iterate through each film
-        films.forEach(film => {
-            // Check if Wedge Antilles is present in the characters array of the film
-            if (film.characters.includes(`https://swapi-api.alx-tools.com/api/people/${characterId}/`)) {
-                count++;
-            }
-        });
-
-        // Print the count of movies where Wedge Antilles is present
-        console.log(count);
-    }
-});
+request.get(endpoint, function (error, response, body) {
+    const movieTitle = JSON.parse(body)
+    console.log(movieTitle.title)
+})
